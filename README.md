@@ -1,6 +1,6 @@
 # Hexagony String Substitutions
 
-This code generates a Hexagony program which loops over its arguments, optionally appending a string to the beggining and/or end of each before performing a series of string subsitutions and outputting the result optionally followed by a newline. The generated Hexagony program will terminate with a divide-by-zero error.
+This code generates a Hexagony program which loops over its arguments, optionally appending a string to the beginning and/or end of each before performing a series of string subsitutions and outputting the result optionally followed by a newline. The generated Hexagony program will terminate with a divide-by-zero error.
 
 `append_front` and `append_end` are strings that will be appended to the front and end of each string, respectively, before performing performing substitutions. Either can be left as an empty string to append nothing in its place.
 
