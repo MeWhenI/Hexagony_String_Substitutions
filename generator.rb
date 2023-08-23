@@ -1,5 +1,5 @@
 # This code generates a Hexagony program which loops over its arguments,
-# optionally appending a char to the beggining and/or end of each before
+# optionally appending a string to the beginning and/or end of each before
 # performing a series of string subsitutions and outputting the result
 # optionally followed by a newline. The generated Hexagony program will
 # terminate with a divide-by-zero error.
@@ -17,7 +17,7 @@
 # prints a newline after each argument.
 #
 # `minify_output` is a boolean which determines whether extra whitespace and
-# no-ops are removed
+# no-ops are removed.
 #
 # Created 2023 by https://github.com/MeWhenI
 
