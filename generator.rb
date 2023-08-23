@@ -68,7 +68,7 @@ generate_main_path = -> append_front, append_end {
 
  f_lit = to_hxg_literal[f]
  e_lit = to_hxg_literal[e]
- f_size_lit = to_hxg_literal[256**(Math::log(f,256).to_i+1)]
+ f_size_lit = f==0 ? 0 : to_hxg_literal[256**(Math::log(f,256).to_i+1)]
  path = 
   f != 0 && e != 0 ? "}#{e_lit}'*'+{#{f_size_lit}'*{#{f_lit}'+" :
   f != 0 ? "#{f_size_lit}'*}#{f_lit}\"+" :
