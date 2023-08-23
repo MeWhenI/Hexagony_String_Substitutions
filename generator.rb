@@ -61,14 +61,7 @@ to_hxg_literal = -> n {
  end
  return "" << n << extra_digits.reverse.join
 }
-encode_str = -> str {
- base, total = 1, 0
- str.bytes{|b|
-  total += base * b
-  base *= 256
- }
- total
-}
+encode_str = -> str { str.bytes.each_with_index.sum{|b, idx| b * 256 ** idx }}
 generate_main_path = -> append_front, append_end {
  f = encode_str[append_front]
  e = encode_str[append_end]
@@ -95,7 +88,7 @@ generate_main_path = -> append_front, append_end {
  path.reverse
 }
 path_capacity = -> len { len**2*3-len*26+16 }
-get_hexagon_len = -> path_size { (13..).find{|len| path_capacity[len] >= path_size } }
+get_hexagon_len = -> path_size { (13..).find{|len| path_capacity[len] >= path_size }}
 fill_to_len = -> front, back, len { front + ?. * (len - front.size - back.size) + back}
 
 main_path = generate_main_path[append_front, append_end]
