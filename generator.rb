@@ -4,7 +4,7 @@
 # optionally followed by a newline. The generated Hexagony program will
 # terminate with a divide-by-zero error.
 #
-# `append_front` and `append_end` are strings that will be appended to the
+# `prepend` and `append` are strings that will be appended to the
 # front and end of each string, respectively, before performing
 # performing substitutions. Either can be left as an empty string to append
 # nothing in its place.
@@ -21,8 +21,8 @@
 #
 # Created 2023 by https://github.com/MeWhenI
 
-append_front = "<"
-append_end = ">"
+prepend = "<"
+append = ">"
 substitutions = [
  ["x", "y"],
  ["hello", "goodbye"],
@@ -62,9 +62,9 @@ to_hxg_literal = -> n {
  return "" << n << extra_digits.reverse.join
 }
 encode_str = -> str { str.bytes.each_with_index.sum{|b, idx| b * 256 ** idx }}
-generate_main_path = -> append_front, append_end {
- f = encode_str[append_front]
- e = encode_str[append_end]
+generate_main_path = -> prepend, append {
+ f = encode_str[prepend]
+ e = encode_str[append]
 
  f_lit = to_hxg_literal[f]
  e_lit = to_hxg_literal[e]
@@ -91,7 +91,7 @@ path_capacity = -> len { len**2*3-len*26+16 }
 get_hexagon_len = -> path_size { (13..).find{|len| path_capacity[len] >= path_size }}
 fill_to_len = -> front, back, len { front + ?. * (len - front.size - back.size) + back}
 
-main_path = generate_main_path[append_front, append_end]
+main_path = generate_main_path[prepend, append]
 
 hexagon_len = get_hexagon_len[main_path.size]
 
