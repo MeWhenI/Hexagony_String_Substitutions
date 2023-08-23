@@ -72,7 +72,7 @@ generate_main_path = -> append_front, append_end {
  path = 
   f != 0 && e != 0 ? "}#{e_lit}'*'+{#{f_size_lit}'*{#{f_lit}'+" :
   f != 0 ? "#{f_size_lit}'*}#{f_lit}\"+" :
-  e != 0 ? "}#{e_lit}'+'+='x&" :
+  e != 0 ? "}#{e_lit}'*'+='x&" :
   "\""
 
  path += "\"\"'"
