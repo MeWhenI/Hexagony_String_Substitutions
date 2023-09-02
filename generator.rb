@@ -37,11 +37,6 @@ if substitutions.any?{|pair| pair.class != Array || pair.count != 2 || pair.any?
  abort "`substitutions` array is the wrong shape"
 end
 
-is_valid_char = -> n { 
- is_hexagony_reserved = -> n { "\t\n\v\f\r !\"\#$%&'()*+,-./:;<=>?@[\\]^_`{|}~0123456789".chars.map(&:ord).include? n }
- is_valid_unicode = -> n { n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n < 0xe000)}
- !is_hexagony_reserved[n] && is_valid_unicode[n]
-}
 to_hxg_literal = -> n {
  abort "Something broke with int literal generation, idk" if n < 0
 
@@ -54,6 +49,11 @@ to_hxg_literal = -> n {
  return "z)" if n==123
  return "\u007F(" if n==126
  
+ is_valid_char = -> n { 
+  is_hexagony_reserved = -> n { "\t\n\v\f\r !\"\#$%&'()*+,-./:;<=>?@[\\]^_`{|}~0123456789".chars.map(&:ord).include? n }
+  is_valid_unicode = -> n { n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n < 0xe000)}
+  !is_hexagony_reserved[n] && is_valid_unicode[n]
+ }
  extra_digits = []
  while !is_valid_char[n]
   extra_digits << n % 10
@@ -90,6 +90,7 @@ generate_main_path = -> prepend, append {
 path_capacity = -> len { len**2*3-len*26+16 }
 get_hexagon_len = -> path_size { (13..).find{|len| path_capacity[len] >= path_size }}
 fill_to_len = -> front, back, len { front + ?. * (len - front.size - back.size) + back}
+fill_all_to_lens = -> lines, sizes { lines.zip(sizes).map{|(front, back), len| fill_to_len[front, back, len] }}
 
 main_path = generate_main_path[prepend, append]
 
@@ -97,7 +98,7 @@ hexagon_len = get_hexagon_len[main_path.size]
 
 main_path += ?. * (path_capacity[hexagon_len] - main_path.size)
 
-top_lines = [
+top_lines = fill_all_to_lens[ [
  ["''\u0001$/{,\\>)':","$"],
  [">='&=/.\\<>'*'","\\"],
  ["\\*'\u0100{{{&__'=+","<>"],
@@ -105,9 +106,9 @@ top_lines = [
  [".=*\\>.*='.&'/","\\['"],
  ["=\"\\<>\"'x&\\\"\"=\u0001$/'-",""],
  ["'&\\$_$~|.\\{\u0100'*$|/$=",""],
-].zip(hexagon_len.upto(hexagon_len+6)).map{|(front, back), len| fill_to_len[front, back, len]}
+],hexagon_len.upto(hexagon_len+6)]
 
-bottom_lines = [
+bottom_lines = fill_all_to_lens[ [
  ["\\>/&x'&x=>$\"\">/'6\u0019{;<.>\u0001(",""],
  ["/}{\u0001'$>-<>}{\u0100<>:='&$>|$\\",""],
  ["/.>\"\"\\'&_'=*'/#{add_newlines ? "<\u00010;$<" : "....\\"}=/\\",""],
@@ -115,7 +116,7 @@ bottom_lines = [
  ["\"\\>\"=/%}*'&x{:'&x{+':",""],
  ["<:<\"$/+='x&}x&\"*{%'+",""],
  ["_&~\"*\"&x}&~x\"&x=}&x",""],
-].zip((hexagon_len*2-1).downto(hexagon_len*2-7)).map{|(front, back), len| fill_to_len[front, back, len]}
+],(hexagon_len*2-1).downto(hexagon_len*2-7)]
 
 7.upto(hexagon_len-2){|line_no|
  top_size = hexagon_len + line_no - 1
